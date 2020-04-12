@@ -39,7 +39,7 @@
                 },
                 loginFormRules: {// 表单验证规则
                     username: [
-                        {required: true, message: '请输入账号', trigger: 'blur'}
+                        {required: true, message: '请输入账号', trigger: 'change'}
                     ],
                     password: [
                         {required: true, message: '请输入密码', trigger: 'change'}
@@ -53,32 +53,63 @@
                 // 表单验证
                 this.$refs['loginFormRef'].validate((valid) => {
                     if (valid) {// 验证通过
-                        // 确认提示
-                        this.$confirm('是否确认提交?', '提示', {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
-                            center: true
-                        }).then(() => { // 选择确认提交
-                            // 选择确认后，调后端接口
-                            this.$http.post("login",this.loginForm).then(res=>{
-                                console.log(res.status) ;
-                                console.log(res.data);
-                            }).catch(res=>{
-                                console.log(res);
-                                console.log(res.status) ;
-                                console.log(res.data);
-                            });
+                        console.log(this.loginForm);
+                        // 选择确认后，调后端接口
+                        this.$http.post("http://192.168.5.110:10000/vue/shop/user/login",this.loginForm).then(res=>{
+                            console.log(res.status) ;
+                            console.log(res.data);
+                            let result = res.data;
+                            if (result.success){
+                                // 登录成功
+                                this.$message({
+                                    type: 'success',
+                                    message: '登录成功'
+                                });
+                                // 将token保存在本地session中
+                                window.sessionStorage.setItem("token",result.data.token);
+                                // 跳转到首页
+                                this.$router.push("/home");
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message: result.message
+                                });
+                            }
 
-                            alert("提交成功");
-                            this.$refs['loginFormRef'].resetFields();
-                        }).catch(() => { // 选择取消
-                            this.$message({
-                                type: 'info',
-                                message: '已取消'
-                            });
+                        }).catch(res=>{
+                            console.log(res);
+                            console.log(res.status) ;
+                            console.log(res.data);
                         });
+
+
+                        // // 确认提示
+                        // this.$confirm('是否确认提交?', '提示', {
+                        //     confirmButtonText: '确定',
+                        //     cancelButtonText: '取消',
+                        //     center: true
+                        // }).then(() => { // 选择确认提交
+                        //     // 选择确认后，调后端接口
+                        //     // this.$http.post("http://localhost:10000/vue/shop/user/login",this.loginForm).then(res=>{
+                        //     this.$http.post("http://192.168.5.110:10000/vue/shop/user/login",this.loginForm).then(res=>{
+                        //         console.log(res.status) ;
+                        //         console.log(res.data);
+                        //     }).catch(res=>{
+                        //         console.log(res);
+                        //         console.log(res.status) ;
+                        //         console.log(res.data);
+                        //     });
+                        //
+                        //     alert("提交成功");
+                        //     this.$refs['loginFormRef'].resetFields();
+                        // }).catch(() => { // 选择取消
+                        //     this.$message({
+                        //         type: 'info',
+                        //         message: '已取消'
+                        //     });
+                        // });
                     } else {
-                        this.$message.error('登录失败');
+                        this.$message.warning('请输入登录信息');
                         // alert('校验失败');
                         // return false;
                     }
@@ -134,7 +165,6 @@
         .login_form {
             position: absolute; // 绝对定位
             bottom: 0;
-            border: 1px solid red;
             width: 100%;
             padding: 0 10px; // 设置输入框与父元素的内边距
             box-sizing: border-box; // 溢出处理
