@@ -3,8 +3,11 @@ import VueRouter from 'vue-router'
 // 导入Login.vue组件
 import Login from '../components/Login'
 import Home from '../components/home'
+// 导入employee.vue组件
+import Employee_add  from '../components/employee/employee_add'
+import Employee_list from '../components/employee/employee_list'
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
     {
@@ -13,14 +16,48 @@ const routes = [
     },
     {
         path: '/login',
-        name: 'login',
-        component: Login
+        name: '登录',
+        component: Login,
+    },
+    {
+        path: '/employee/list',
+        name: '员工列表',
+        component: Employee_list,
+        hidden:false
+    },
+    {
+        path: '/employee/add',
+        name: '编辑员工',
+        component: Employee_add,
+        hidden: true,
     },
     {
         path:'/home',
         name:"首页",
-        component: Home
-    }
+        component: Home,
+        hidden:false,
+        // children:[
+        //     {
+        //         path: '/employee/list',
+        //         name: '员工列表',
+        //         component: Employee_list,
+        //         hidden:false
+        //     },
+        //     {
+        //         path: '/employee/add',
+        //         name: '编辑员工',
+        //         component: Employee_add,
+        //         hidden: true,
+        //     },
+            // {
+            //     path:'/cms/page/edit/:pageId',// 页面的路径
+            //     name:'编辑页面',// 页面的名称
+            //     component: page_edit,// 组件
+            //     hidden:true // 是否显示
+            // }
+        // ]
+    },
+
 ];
 
 

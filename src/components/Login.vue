@@ -56,9 +56,10 @@
                         console.log(this.loginForm);
                         // 选择确认后，调后端接口
                         this.$http.post("http://192.168.5.110:10000/vue/shop/user/login",this.loginForm).then(res=>{
-                            console.log(res.status) ;
                             console.log(res.data);
                             let result = res.data;
+                            console.log(res.status) ;
+
                             if (result.success){
                                 // 登录成功
                                 this.$message({
@@ -132,11 +133,12 @@
     }
 
     .login_box {
-        height: 250px;
-        width: 400px;
+        height: 300px;
+        width: 450px;
+        /*border: 1px solid black;*/
         /*background-color: #fff;*/
         background-color: #fff;
-        border-radius: 4px;
+        border-radius: 10px;
         position: absolute; // 绝对定位
         left: 50%; // 据左部50%
         top: 50%; // 据上部50%
@@ -163,8 +165,11 @@
         }
 
         .login_form {
+            /*border: 1px solid red;*/
             position: absolute; // 绝对定位
-            bottom: 0;
+            left: 50%; // 据左部50%
+            top: 50%; // 据上部50%
+            transform: translate(-50%, -30%);
             width: 100%;
             padding: 0 10px; // 设置输入框与父元素的内边距
             box-sizing: border-box; // 溢出处理
